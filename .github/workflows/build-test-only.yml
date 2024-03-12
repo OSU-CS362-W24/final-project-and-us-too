@@ -16,6 +16,7 @@ jobs:
           node-version: 20
       - run: npm ci
       # Build, start server & run tests
+      - run: npm run build
       - run: npm run start
       - run: npm run jest:test
       - run: npm run cy:test
