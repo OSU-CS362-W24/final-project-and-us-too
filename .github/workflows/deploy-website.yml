@@ -1,0 +1,27 @@
+name: Test & deploy whole website
+on:
+  push:
+    branches: [ main ]
+jobs:
+  # 1st job that builds & new push
+  build-and-test-first:
+    uses: ./.github/workflows/build-test-only.yml
+    with:
+      upload-pages-artifact: true
+  # 2nd job that actually deploys the site
+  deploy-website:
+    needs: build-and-test-first
+    runs-on: ubunto-latest
+    # setup to work with github pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    # deployment steps
+    steps:
+        # just configure & deploy previously built site
+        - uses: actions/configure-pages@v3
+        - uses: actions/deploy-pages@v2
+          id: deploy

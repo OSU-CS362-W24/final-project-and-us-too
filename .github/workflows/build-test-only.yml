@@ -1,0 +1,28 @@
+name: Build & test only
+on:
+  workflow_call:
+    inputs:
+      upload-pages-artifact:
+        type: boolean
+        required: true
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # Initialize environment
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm ci
+      # Build, start server & run tests
+      - run: npm run build
+      - run: npm run start
+      - run: npm run jest:test
+      - run: npm run cy:test
+      # Upload results to github pages if told to
+      - if: ${{ inputs.upload-pages-artifact }}
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # take directly from webpack's results
+          path: dist/
