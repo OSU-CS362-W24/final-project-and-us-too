@@ -57,7 +57,7 @@ test("correctly sorts a short array", () =>
 
     // Assert that list is sorted
     for (let i = 0; i < arr.length - 1; i++)
-        expect(arr[i]).toBeLessThanOrEqual(arr[i + 1]);
+        expect(arr[i].x).toBeLessThanOrEqual(arr[i + 1].x);
 });
 
 test("correctly sorts a longer array", () =>
@@ -82,7 +82,7 @@ test("correctly sorts a longer array", () =>
 
     // Assert that list is sorted
     for (let i = 0; i < arr.length - 1; i++)
-        expect(arr[i]).toBeLessThanOrEqual(arr[i + 1]);
+        expect(arr[i].x).toBeLessThanOrEqual(arr[i + 1].x);
 });
 
 test("correctly sorts an array with repeat values", () =>
@@ -106,5 +106,5 @@ test("correctly sorts an array with repeat values", () =>
 
     // Assert that list is sorted
     for (let i = 0; i < arr.length - 1; i++)
-        expect(arr[i]).toBeLessThanOrEqual(arr[i + 1]);
+        expect(arr[i].x).toBeLessThanOrEqual(arr[i + 1].x);
 });
