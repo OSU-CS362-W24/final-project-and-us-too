@@ -417,12 +417,57 @@ describe('loadCurrentChartData tests', () =>
 {
     test('loads current simple chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart = 
+        {
+            type: 'bar',
+            data:
+            {
+              labels: ['label'],
+              datasets: [{ label: 'Data', data: [9] }]
+            }
+        };
+
+        // Saves the chart to localStorage
+        storage.updateCurrentChartData(chart);
+
+        // Asserts that loaded chart is the same as the one that was saved
+        var chart2 = storage.loadCurrentChartData();
+        expect(chart2).toEqual(chart);
     });
     test('loads current complex chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart = 
+        {
+            type: 'line',
+            data:
+            {
+                labels: ['l1', 'l2', 'l3', 'l4', 'l5', 'l5', 'l6'],
+                datasets:
+                [{
+                    label: 'Data',
+                    data: [7345, -34, 37.4, 827, 7, 1, 2.902]
+                },
+                {
+                    label: 'Data2',
+                    data: [0.2, 2.8, 2.6, 2.9, 2.5, 2.1, -2.0]
+                },
+                {
+                    label: 'Extraneous Data',
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                },
+                ]
+            }
+        };
+
+        // Saves the chart to localStorage
+        storage.updateCurrentChartData(chart);
+
+        // Asserts that loaded chart is the same as the one that was saved
+        var chart2 = storage.loadCurrentChartData();
+        expect(chart2).toEqual(chart);
     });
 });
