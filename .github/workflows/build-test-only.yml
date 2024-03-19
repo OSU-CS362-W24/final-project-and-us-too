@@ -5,6 +5,8 @@ on:
       upload-pages-artifact:
         type: boolean
         required: true
+  pull_request:
+    branches: [main]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
