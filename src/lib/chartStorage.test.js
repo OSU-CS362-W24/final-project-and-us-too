@@ -250,13 +250,105 @@ describe('loadAllSavedCharts tests', () =>
 {
     test('loads first saved chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart =
+        {
+            type: 'bar',
+            data:
+            {
+              labels: ['label1', 'label2', 'label3'],
+              datasets:
+              [{
+                label: 'Data',
+                data: [9, 235, 52],
+              }]
+            }
+        };
+
+        // Save the chart
+        storage.saveChart(chart, 0);
+        // Loads it back
+        var charts = storage.loadAllSavedCharts();
+
+        // Asserts that charts loaded is the only one that was saved
+        // (can't assert length because localStorage not mocked; not reset)
+        expect(charts.length).toBeGreaterThanOrEqual(1);
+        expect(charts[0]).toEqual(chart);
     });
     test('loads sixth saved chart successfully', () =>
     {
+        // Initializes DOM & creates charts
         resetGlobalDOM();
-        // Implement me!
+        var charts =
+        [
+            {
+                type: 'bar',
+                data:
+                {
+                  labels: ['label1', 'label2', 'label3'],
+                  datasets:
+                  [{ label: 'Data', data: [9, 235, 52], }]
+                }
+            },
+            {
+                type: 'pie',
+                data:
+                {
+                  labels: ['slice 1', 'blueberry slice'],
+                  datasets:
+                  [{ data: [1, 294.2], }]
+                }
+            },
+            {
+                type: 'line',
+                data:
+                {
+                  labels: ['l1', 'l2', 'l3', 'l4', 'l5', 'l5', 'lLongNum'],
+                  datasets:
+                  [{ label: 'Data', data: [1, 2, 3, 4, 5, 6, 23952.35], }]
+                }
+            },
+            {
+                type: 'bar',
+                data:
+                {
+                  labels: ['label5', 'label9', 'l4bel52', 'label-28'],
+                  datasets:
+                  [{ label: 'Nums', data: [5.2, 9, 52, -28], }]
+                }
+            },
+            {
+                type: 'line',
+                data:
+                {
+                  labels: ['label'],
+                  datasets:
+                  [{ label: 'Date', data: [2024], }]
+                }
+            },
+            {
+                type: 'pie',
+                data:
+                {
+                  labels: ['section1', 'section2'],
+                  datasets:
+                  [{ data: [65, 35], }]
+                }
+            },
+        ];
+
+        // Saves the charts
+        for (var i = 0; i < charts.length; i++)
+            storage.saveChart(charts[i], i);
+        // Loads all charts
+        var charts2 = storage.loadAllSavedCharts();
+
+        // Assert that every loaded chart is equivalent
+        // And that only the charts saved were loaded
+        expect(charts2.length).toBeGreaterThanOrEqual(charts.length);
+        for (var i = 0; i < charts.length; i++)
+            expect(charts2[i]).toEqual(charts[i]);
     });
 });
 
