@@ -357,13 +357,58 @@ describe('updateCurrentChartData tests', () =>
 {
     test('saves current simple chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart = 
+        {
+            type: 'bar',
+            data:
+            {
+              labels: ['label'],
+              datasets: [{ label: 'Data', data: [9] }]
+            }
+        };
+
+        // Save the chart as "current"
+        storage.updateCurrentChartData(chart);
+
+        // Asserts that chart in local storage is the one that was saved
+        var chart2 = JSON.parse(window.localStorage.getItem("currentChartData"));
+        expect(chart2).toEqual(chart);
     });
     test('saves current complex chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart = 
+        {
+            type: 'line',
+            data:
+            {
+                labels: ['l1', 'l2', 'l3', 'l4', 'l5', 'l5', 'l6'],
+                datasets:
+                [{
+                    label: 'Data',
+                    data: [7345, -34, 37.4, 827, 7, 1, 2.902]
+                },
+                {
+                    label: 'Data2',
+                    data: [0.2, 2.8, 2.6, 2.9, 2.5, 2.1, -2.0]
+                },
+                {
+                    label: 'Extraneous Data',
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                },
+                ]
+            }
+        };
+
+        // Save the chart as "current"
+        storage.updateCurrentChartData(chart);
+
+        // Asserts that chart in local storage is the one that was saved
+        var chart2 = JSON.parse(window.localStorage.getItem("currentChartData"));
+        expect(chart2).toEqual(chart);
     });
 });
 
