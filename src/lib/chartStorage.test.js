@@ -20,18 +20,130 @@ describe('saveChart tests', () =>
 {
     test('saves first chart successfully', () =>
     {
+        // Initializes DOM & creates chart
         resetGlobalDOM();
-        // Implement me!
+        var chart =
+        {
+            type: 'bar',
+            data:
+            {
+              labels: ['label1', 'label2', 'label3'],
+              datasets:
+              [{
+                label: 'Data',
+                data: [9, 235, 52],
+              }]
+            }
+        };
+
+        // Save the chart
+        storage.saveChart(chart, 0);
+
+        // Load saved chart and asserts that loaded is the same
+        var chart2 = JSON.parse(window.localStorage.getItem("savedCharts"))[0];
+        expect(chart2).toEqual(chart);
     });
     test('saves five charts successfully', () =>
     {
+        // Initializes DOM & creates charts
         resetGlobalDOM();
-        // Implement me!
+        var charts =
+        [
+            {
+                type: 'bar',
+                data:
+                {
+                  labels: ['label1', 'label2', 'label3'],
+                  datasets:
+                  [{ label: 'Data', data: [9, 235, 52], }]
+                }
+            },
+            {
+                type: 'line',
+                data:
+                {
+                  labels: ['l1', 'l2', 'l3', 'l4', 'l5', 'l5', 'lLongNum'],
+                  datasets:
+                  [{ label: 'Data', data: [1, 2, 3, 4, 5, 6, 23952.35], }]
+                }
+            },
+            {
+                type: 'bar',
+                data:
+                {
+                  labels: ['label5', 'label9', 'l4bel52', 'label-28'],
+                  datasets:
+                  [{ label: 'Nums', data: [5.2, 9, 52, -28], }]
+                }
+            },
+            {
+                type: 'line',
+                data:
+                {
+                  labels: ['label'],
+                  datasets:
+                  [{ label: 'Date', data: [2024], }]
+                }
+            },
+            {
+                type: 'pie',
+                data:
+                {
+                  labels: ['section1', 'section2'],
+                  datasets:
+                  [{ data: [65, 35], }]
+                }
+            },
+        ];
+
+        // Saves the charts
+        for (var i = 0; i < charts.length; i++)
+            storage.saveChart(charts[i], i);
+
+        // Load saved charts and asserts that loaded ones are the same
+        for (var i = 0; i < charts.length; i++)
+        {
+            var chart2 = JSON.parse(window.localStorage.getItem("savedCharts"))[i];
+            expect(chart2).toEqual(charts[i]);
+        }
     });
     test('saves & overwrites a chart successfully', () =>
     {
+        // Initializes DOM & creates charts
         resetGlobalDOM();
-        // Implement me!
+        var chart1 =
+        {
+            type: 'bar',
+            data:
+            {
+              labels: ['label1', 'label2', 'label3', 'label4'],
+              datasets:
+              [{
+                label: 'Data',
+                data: [20, -902, 19, 23],
+              }]
+            }
+        };
+        var chart2 =
+        {
+            type: 'pie',
+            data:
+            {
+              labels: ['group 1', 'group 2', 'group 3'],
+              datasets:
+              [{ data: [12, 52, 36] }]
+            }
+        };
+
+        // Saves chart 1 in index 0
+        storage.saveChart(chart1, 0);
+        // Overwrites chart in index 0 with index 2
+        storage.saveChart(chart2, 0);
+
+        // Load saved chart and asserts that it is the most recent one
+        var loaded = JSON.parse(window.localStorage.getItem("savedCharts"))[0];
+        expect(loaded).not.toEqual(chart1);
+        expect(loaded).toEqual(chart2);
     });
 });
 
