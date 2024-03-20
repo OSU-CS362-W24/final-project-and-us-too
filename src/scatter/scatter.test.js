@@ -161,15 +161,15 @@ test('clearing chart data resets all inputs and data points', async () => {
     expect(yInputFields).toHaveLength(1);
 });
 
-const chartUtils = require('../chartBuilder/chartBuilder');
-
 test('user input data is correctly sent to the chart generation function', async () => {
+    // Setting up a spy on the generateChartImg function and providing a mock implementation
+    jest.mock('../lib/generateChartImg.js');
+    const generateChartImgMock = require('../lib/generateChartImg');
+    generateChartImgMock.mockImplementation(() => 'http://placekitten.com/480/480');
+
     // Initializing DOM and loading JavaScript
     initDomFromFiles(path.resolve(__dirname, './scatter.html'), path    .resolve(__dirname, './scatter.js'));
     const user = userEvent.setup();
-
-    // Setting up a spy on the generateChartImg function and providing a mock implementation
-    const generateChartImgSpy = jest.spyOn(chartUtils, 'generateChartImg').mockImplementation(() => 'http://placekitten.com/480/480');
 
     // Filling in some chart data
     const chartTitleInput = document.getElementById('chart-title-input');
@@ -189,21 +189,19 @@ test('user input data is correctly sent to the chart generation function', async
     await user.click(generateChartBtn);
 
     // Checking if generateChartImg was correctly called and with the correct parameters
-    expect(generateChartImgSpy).toHaveBeenCalled();
-    expect(generateChartImgSpy).toHaveBeenCalledWith(
+    expect(generateChartImgMock).toHaveBeenCalled();
+    expect(generateChartImgMock).toHaveBeenCalledWith(
         expect.any(String), // The first argument passed to generateChartImg (chart type)
-        expect.objectContaining({ // The second argument passed to generateChartImg (chart data)
-            title: 'Test Chart',
-            xLabel: 'Test X Label',
-            yLabel: 'Test Y Label',
-            data: expect.arrayContaining([
-                expect.objectContaining({ x: '5', y: '10' })
-            ])
-        }),
+        [ // Second argument should be data for the chart
+            expect.objectContaining({ x: '5', y: '10' })
+        ],
+        'Test X Label', // Third argument should be label for X axis
+        'Test Y Label', // Fourth argument should be label for Y axis
+        'Test Chart', // Fifth argument should be title for chart itself
         expect.anything() // Any other arguments passed to generateChartImg (if any)
     );
 
     // Cleaning up the mock
-    generateChartImgSpy.mockRestore();
+    generateChartImgMock.mockRestore();
 });
 
